@@ -46,6 +46,7 @@
   #define Uses_TDeskTop
   #define Uses_TApplication
 #include <tvision/tv.h>
+#include "address.h"
 const int  cmTechInfo = 101;
 const int  cmNewData  = 102;
 
@@ -70,8 +71,8 @@ class TechInfoDialog : public TDialog
 		{
 		TRect *t = new TRect();
 		*t = getExtent();
-		t->a.x ++;
-        t->a.y ++;
+		t->a.x++;
+        t->a.y++;
 		t->b.x --;
 		t->b.y -= 2;
         TScrollBar *sb = new TScrollBar
@@ -80,10 +81,11 @@ class TechInfoDialog : public TDialog
         insert( sb );
 		insert( new TechInfoList( *t, 1, sb ) );
         insert( new TButton(TRect(10, t->b.y - 1, 20, t->b.y + 1),
-                          "~O~k", cmClose, bfDefault) );
+                          "~O~k", cmOK, bfDefault) );
         
 
 		}
+		
       
 	};
 

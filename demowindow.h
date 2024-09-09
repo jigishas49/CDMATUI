@@ -18,9 +18,12 @@
 #define Uses_TDeskTop
 #include <tvision/tv.h>
 #include "myinterior.h"
+#include "WindowIn.h"
 class TDemoWindow : public TWindow {
 public:
     TDemoWindow(const TRect& r, const char *aTitle, short aNumber);
+    private:
+    MainWindowInterior *_Interior;
 };
 
 #endif

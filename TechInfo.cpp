@@ -15,9 +15,13 @@
 #define Uses_TScreen
 #include "TechInfo.h"
 #include "Myapp.h"
-
+#include "address.h"
+#include <fstream>
 #include <tvision/tv.h>
-char data[10][10] = {"one", "two", "three", "four", "five","six", "seven", "eight", "nine", "ten" };
+#include "memory_mapping.h"
+char data[5][5] = {"ON","OFF" };
+ 
+
 MyTCollection *tc;
 void TechInfoView::draw()
 	{
@@ -43,14 +47,36 @@ void TechInfoList::handleEvent(TEvent &event)
            message( TProgram::deskTop, evBroadcast,
                     cmNewData, tc->at(focused  + 1));
            break;
-           
+        
+		
 		 default :
    		  break;
 		}
 	TListBox::handleEvent( event );
+	 if (event.what == evBroadcast && event.message.command == cmListItemSelected) {
+        TListBox::handleEvent(event);
+
+        // Get the selected item
+        char *selectedItem = (char *)tc->at(focused);
+
+        // Determine the corresponding value to write to file
+         // Default to 0
+		 int valueTowrite=0;
+        if (strcmp(selectedItem, "ON") == 0) {
+            valueTowrite = 1;
+        }
+         mem_trans(valueTowrite);
+       //reg = set_registers2(uczMappedArea2, ulSUMAddressOffset2);
+        // Write to file
+        
+    } else {
+        TListBox::handleEvent(event);
+    }
+	
 	}
 
  
+
 void TechInfoView::handleEvent(TEvent &event)
 	{
 	TView::handleEvent( event );
@@ -66,7 +92,7 @@ TechInfoList::TechInfoList(TRect& r, ushort numcols, TScrollBar *sb) :
  TListBox ( TRect(r.a.x + 2, r.a.y + 1, r.b.x - 3, r.b.y - 2 ), numcols, sb )
 	{
 	tc = new MyTCollection ();
-	for (int c = 0; c < 10; c++)
+	for (int c = 0; c < 2; c++)
 		{
 		tc->insert( (void *)data[c] );
 		}
