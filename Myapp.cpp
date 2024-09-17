@@ -1,7 +1,17 @@
 #include "Myapp.h"
 #include "TechInfo.h"
+
 #include "TModalBox.h"
 #include "WindowIn.h"
+#include "TechInfo1.h"
+#include "address.h"
+#include "memory_mapping.h"
+#include "TechInfo2.h"
+#include "TechInfo3.h"
+
+#include <ctime> 
+
+#define UPDATE_INTERVAL 1000
 const int cmMyFileOpen = 200;
 const int cmMyNewWin   = 201;
 
@@ -38,7 +48,14 @@ TDeskTop  *TMyApp::initDeskTop(TRect r) {
 }
 TStatusLine *TMyApp::initStatusLine(TRect r)
 {
-    r.a.y = r.b.y - 1;
+    r.a.y = r.b.y - 1;if (deskTop->current)
+        {
+            MainWindowInterior *view = dynamic_cast<MainWindowInterior*>(deskTop->current);
+            if (view)
+            {
+                view->update(); // Call update method
+            }
+        }
     return new TStatusLine(r,
         *new TStatusDef(0, 0xFFFF) +
         *new TStatusItem(0, kbF10, cmMenu) +
@@ -54,10 +71,11 @@ TMenuBar *TMyApp::initMenuBar(TRect r)
 
     return new TMenuBar(r,
         *new TSubMenu("~T~ransmitter", kbAltF) +
-        *new TMenuItem("~M~ode", cmTechInfo, kbF3, hcNoContext, "F3") +
-        *new TMenuItem("~O~pen", cmTechInfo, kbF3, hcNoContext, "F3") +
-        *new TMenuItem("~N~ew", cmMyNewWin, kbF4, hcNoContext, "F4") +
+        *new TMenuItem("~Tx", cmTechInfo1, kbF3, hcNoContext, "F3") +
+        *new TMenuItem("~Mod", cmTechInfo1, kbF3, hcNoContext, "F3") +
+        *new TMenuItem("~M~essage", cmMyNewWin, kbF4, hcNoContext, "F4") +
         *new TMenuItem("~C~hipRate", cmRadioDialog, kbF4, hcNoContext, "F4")+
+        *new TMenuItem("~P~RN", cmRadioDialog2, kbF4, hcNoContext, "F4")+
         newLine() +
         *new TMenuItem("E~x~it", cmQuit, cmQuit, hcNoContext, "Alt-X") +
         *new TSubMenu("~W~indow", kbAltW) +
@@ -76,24 +94,21 @@ void TMyApp::handleEvent(TEvent& event)
         
             
         case cmTechInfo:
-            TechInfo();
+            TechInfo1();
             break;
+        case cmTechInfo1:
+             TechInfo1();
+             break;
         case cmRadioDialog:
         RadioDialog();
         break;
+        case cmRadioDialog2:
+        RadioDialog2();
         case cmClose:
              Tech1();
             case cmMyNewWin:
-            
-            TView* t = (TView*)validView(new TModalBox());
-            if (t)
-            {
-                // ExecView() a modal dialog box
-                deskTop->execView(t);
-
-                // Must destroy a modal dialog box
-                destroy(t);
-            }
+            Message();
+           
             break;
           
         }
@@ -107,6 +122,54 @@ void TMyApp::Tech1()
     
   
 }
+void TMyApp::Message()
+	  {
+	  TRect tr;
+
+	  tr.a.x = 10;
+	  tr.a.y = 17;
+	  tr.b.x = tr.a.x + 30;
+	  tr.b.y = tr.a.y + 3;
+	  TechInfoView1 *tv = new TechInfoView1(TRect(1,1,10,3));
+	  TWindow *twv =  new TWindow(
+                     TRect( tr.a.x - 1, tr.a.y - 1, tr.b.x + 1, tr.b.y + 1 ),
+											 "Individual View", 2 );
+	  twv->insert( tv );
+	  deskTop->insert( twv );
+
+	  tr.a.x = 10;
+	  tr.a.y = 3;
+	  tr.b.x = tr.a.x + 30;
+	  tr.b.y = tr.a.y + 10;
+	  TechInfoDialog1 *ti = new TechInfoDialog1( tr );
+      
+	  deskTop->execView( ti );
+         destroy(ti);
+   }
+void TMyApp::TechInfo1()
+	  {
+	  TRect tr;
+
+	  tr.a.x = 10;
+	  tr.a.y = 17;
+	  tr.b.x = tr.a.x + 30;
+	  tr.b.y = tr.a.y + 3;
+	  TechInfoView1 *tv = new TechInfoView1(TRect(1,1,10,3));
+	  TWindow *twv =  new TWindow(
+                     TRect( tr.a.x - 1, tr.a.y - 1, tr.b.x + 1, tr.b.y + 1 ),
+											 "Individual View", 2 );
+	  twv->insert( tv );
+	  deskTop->insert( twv );
+
+	  tr.a.x = 10;
+	  tr.a.y = 3;
+	  tr.b.x = tr.a.x + 30;
+	  tr.b.y = tr.a.y + 10;
+	  TechInfoDialog1 *ti = new TechInfoDialog1( tr );
+      
+	  deskTop->execView( ti );
+         destroy(ti);
+   }
 
 void TMyApp::TechInfo()
 	  {
@@ -137,40 +200,68 @@ void TMyApp::idle()
 {
     TProgram::TProgram::idle();
     _Clock->update();
+   
+        
+
+        // Optionally, add a delay to control update frequency
+        
 }
 void TMyApp::RadioDialog(void)
 {
-    TDialog *pd = new TDialog( TRect( 2,1,40,15), " Radio Buttons ");
-    if( validView( pd ) )
-    {
-        TSItem *J1 = new TSItem("Nietsche",
-                     new TSItem("Kant",
-                     new TSItem("Daly",
-                     new TSItem("Socrates",
-                     new TSItem("Descartes",
-                    
-                     new TSItem("Bird",
-                     new TSItem("Jordan", 0 )))))));
-
     
+        TRect dialogRect(2, 1, 50, 20);
+        TRect tr;
 
+	  tr.a.x = 10;
+	  tr.a.y = 17;
+	  tr.b.x = tr.a.x + 30;
+	  tr.b.y = tr.a.y + 3;
+	  TechInfoView1 *tv = new TechInfoView1(TRect(1,1,10,3));
+	  TWindow *twv =  new TWindow(
+                     TRect( tr.a.x - 1, tr.a.y - 1, tr.b.x + 1, tr.b.y + 1 ),
+											 "Individual View", 2 );
+	  twv->insert( tv );
+	  deskTop->insert( twv );
 
-   
-
-
-
-        TView *RadioButtons = new TRadioButtons( TRect(2,1,40,16), J1 );
-
-        pd->insert( RadioButtons );
-         TButton *btnOk = new TButton(TRect(10,  8, 25, 10), "~O~k", cmOK, bfDefault);
-        pd->insert(btnOk);
-        deskTop->execView( pd );
-         TRadioButtons *rb = static_cast<TRadioButtons *>(RadioButtons);
-        int selectedIndex = rb->mark(0); // Mark the first radio button (index 0)
-
+	  tr.a.x = 10;
+	  tr.a.y = 3;
+	  tr.b.x = tr.a.x + 30;
+	  tr.b.y = tr.a.y + 10;
+         TechInfoDialog2 *ti = new TechInfoDialog2( tr);
+        
+        deskTop->execView( ti );
+         destroy(ti);
+        
+         
        
         
     }
 
-    destroy(pd);
+   
+
+void TMyApp::RadioDialog2(void)
+{
+    TRect dialogRect(2, 1, 50, 20);
+        TRect tr;
+
+	  tr.a.x = 5;
+	  tr.a.y = 10;
+	  tr.b.x = tr.a.x + 100;
+	  tr.b.y = tr.a.y + 10;
+	  TechInfoView1 *tv = new TechInfoView1(TRect(1,1,10,3));
+	  TWindow *twv =  new TWindow(
+                     TRect( tr.a.x - 1, tr.a.y - 1, tr.b.x + 1, tr.b.y + 1 ),
+											 "Individual View", 2 );
+	  twv->insert( tv );
+	  deskTop->insert( twv );
+
+	  tr.a.x = 10;
+	  tr.a.y = 3;
+	  tr.b.x = tr.a.x + 30;
+	  tr.b.y = tr.a.y + 10;
+         TechInfoDialog4 *ti = new TechInfoDialog4( tr);
+        
+        deskTop->execView( ti );
+         destroy(ti);
+        
 }

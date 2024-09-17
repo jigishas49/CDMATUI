@@ -31,9 +31,12 @@
 #include <sys/mman.h>
 #include <cstring>
 #include "WindowIn.h"
+#ifndef evTimer
+#define evTimer 4
+#endif
 const int cmModalBox    = 100; 
-const int cmRadioDialog = 200;
-
+const int cmRadioDialog = 202;
+const int cmRadioDialog2 = 300;
 class TMyApp : public TApplication {
 public:
     TMyApp();
@@ -44,9 +47,11 @@ public:
     void myNewWindow();
     void idle();
     void TechInfo();
+    void TechInfo1();
     void Tech1();
+    void Message();
    void RadioDialog(void);
-
+void RadioDialog2(void);
 private:
     Title* _TitleLine;
     Clock* _Clock;

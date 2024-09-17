@@ -1,7 +1,7 @@
 
 
-#ifndef TECHINFO_H_
-#define TECHINFO_H_
+#ifndef TECHINFO3_H_
+#define TECHINFO3_H_
 #define Uses_TApplication
 #define Uses_TButton
 #define Uses_TCheckBoxes
@@ -47,27 +47,27 @@
   #define Uses_TApplication
 #include <tvision/tv.h>
 #include "address.h"
-const int  cmTechInfo = 101;
-const int  cmNewData  = 102;
 
+const int  cmNewData4  = 107;
+const int cmTechInfo4= 108;
 
 #pragma hdrstop
-class TechInfoList : public TListBox
+class TechInfoList4 : public TListBox
 		{
 		public:
 
 
-		TechInfoList( TRect&, ushort, TScrollBar* );
+		TechInfoList4( TRect&, ushort, TScrollBar* );
         void handleEvent( TEvent & );
 		};
 
 
-class TechInfoDialog : public TDialog 
+class TechInfoDialog4 : public TDialog 
 	{
 	public :
     
-	TechInfoDialog(TRect& r ) :
-					TWindowInit(&TechInfoDialog::initFrame),
+	TechInfoDialog4(TRect& r ) :
+					TWindowInit(&TechInfoDialog4::initFrame),
 					TDialog (r, "Data ListBox")
 		{
 		TRect *t = new TRect();
@@ -80,7 +80,7 @@ class TechInfoDialog : public TDialog
                  ( TRect(t->b.x - 2, t->a.y + 1, t->b.x - 1, t->b.y - 2) );
 
         insert( sb );
-		insert( new TechInfoList( *t, 1, sb ) );
+		insert( new TechInfoList4( *t, 1, sb ) );
         insert( new TButton(TRect(10, t->b.y - 1, 20, t->b.y + 1),
                           "~O~k", cmOK, bfDefault) );
         
@@ -92,13 +92,13 @@ class TechInfoDialog : public TDialog
 
 
 
-class TechInfoView : public TView
+class TechInfoView4 : public TView
 		{
 		const char *curdata;
 
 		public:
 
-		TechInfoView(TRect r) : TView (r)
+		TechInfoView4(TRect r) : TView (r)
                          {
                          eventMask |= evBroadcast;
                          curdata = "Press Up or Down Arrow";
@@ -108,11 +108,11 @@ class TechInfoView : public TView
 		};
 
 
-class MyTCollection : public TStringCollection
+class MyTCollection4: public TStringCollection
 		{
 		public :
 
-		MyTCollection() : TStringCollection (10,5) {};
+		MyTCollection4() : TStringCollection (10,5) {};
 		void *readItem( ipstream& is) { return this; };
 		void writeItem( void *item, opstream& os) {};
 		};

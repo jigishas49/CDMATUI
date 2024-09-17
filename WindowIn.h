@@ -3,9 +3,10 @@
 
 #define Uses_TView
 #include <tvision/tv.h>
-
+#include <thread>
+#include <chrono>
 #include "Types.h"
-
+#include <mutex>
 class MainWindowInterior : public TView
 {
 public:
@@ -14,9 +15,13 @@ public:
 
     //Functions to update
     void updateReceiverStatus(ReceiverStatus status);
+    void update();
+     void handleEvent( TEvent & );
+   
 private:
     ReceiverStatus      _ReceiverStatus;
 
+    std::mutex mtx;
     void displayReceiverParameters();
 };
 

@@ -26,13 +26,11 @@ enum ReceiverLockStatus {
 #ifndef RECIVER_STATUS_TYPE
 #define RECIVER_STATUS_TYPE
 typedef struct ReceiverStatus {
-    ChippingRates       ChipRate;
-    u_int16_t           PRN;
-    double              Frequency;
-    float               Power;
-    float               CByNo;
-    ReceiverLockStatus  LockStatus;
-    u_int32_t           LockTime;
+     u_int32_t* prn;
+    u_int32_t* fll;
+    u_int32_t* fll_carr;
+    u_int32_t* psr;
+    u_int32_t* adr_int;
 }ReceiverStatus;
 #endif
 #pragma pack()
@@ -41,16 +39,16 @@ typedef struct ReceiverStatus {
 #ifndef TRANSMITTER_STATUS_TYPE
 #define TRANSMITTER_STATUS_TYPE
 typedef struct TransmitterStatus {
-    ChippingRates       ChipRate;
-    u_int16_t           PRN;
-    double              Frequency;
-    float               Power;
-    bool                OutputEnable;
-    bool                ModulationEnable;
+    u_int32_t* tx_on_off;
+    u_int32_t* mod_on_off;
+    u_int32_t* chip_sel;
+     u_int32_t* msg;
+      u_int32_t* prn;
+
 
 }TransmitterStatus;
 #endif
 #pragma pack()
 
 
-#endif // TUITYPES_H
+#endif // TYPES_H

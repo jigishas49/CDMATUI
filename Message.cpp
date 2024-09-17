@@ -13,18 +13,18 @@
 #define Uses_TApplication
 #define Uses_TChDirDialog
 #define Uses_TScreen
-#include "TechInfo.h"
+#include "TechInfo1.h"
 #include "Myapp.h"
 #include "address.h"
 #include <fstream>
 #include <tvision/tv.h>
 #include "memory_mapping.h"
-#include "Types.h"
-char data[5][5] = {"ON","OFF" };
+#include "Message.h"
+char data3[5][5] = {"ON","OFF" };
  
 
-MyTCollection *tc;
-void TechInfoView::draw()
+MyTCollection3 *tc3;
+void TechInfoView3::draw()
 	{
 	TDrawBuffer  *tb = new TDrawBuffer;
 
@@ -33,7 +33,7 @@ void TechInfoView::draw()
 	writeBuf(0,0,10,1, *tb );
 	}
     
-void TechInfoList::handleEvent(TEvent &event)
+void TechInfoList3::handleEvent(TEvent &event)
 	{
          // Call base handleEvent().
 
@@ -42,11 +42,11 @@ void TechInfoList::handleEvent(TEvent &event)
 		 {
 		 case kbUp :
            message( TProgram::deskTop, evBroadcast,
-                    cmNewData, tc->at(focused > 0 ? focused - 1 : focused));
+                    cmNewData3, tc3->at(focused > 0 ? focused - 1 : focused));
            break;
 		 case kbDown :
            message( TProgram::deskTop, evBroadcast,
-                    cmNewData, tc->at(focused  + 1));
+                    cmNewData3, tc3->at(focused  + 1));
            break;
         
 		
@@ -58,7 +58,7 @@ void TechInfoList::handleEvent(TEvent &event)
         TListBox::handleEvent(event);
 
         // Get the selected item
-        char *selectedItem = (char *)tc->at(focused);
+        char *selectedItem = (char *)tc3->at(focused);
 
         // Determine the corresponding value to write to file
          // Default to 0
@@ -66,10 +66,17 @@ void TechInfoList::handleEvent(TEvent &event)
         if (strcmp(selectedItem, "ON") == 0) {
             valueTowrite = 1;
         }
-		TransmitterStatus TransmitterStatus=mem_trans();
-		*(TransmitterStatus.tx_on_off)=valueToWrite;
-		
-      
+          std::ofstream outFile("example.txt");
+        if (outFile.is_open()) {
+            outFile << "Value: " << valueTowrite << std::endl;
+            outFile.close();
+        } else {
+            // Handle the case when the file can't be opened
+            std::cerr << "Unable to open file for writing." << std::endl;
+        }
+          TransmitterStatus TransmitterStatus=mem_trans();
+		*(TransmitterStatus.mod_on_off)=valueToWrite;
+       
        //reg = set_registers2(uczMappedArea2, ulSUMAddressOffset2);
         // Write to file
         
@@ -81,24 +88,25 @@ void TechInfoList::handleEvent(TEvent &event)
 
  
 
-void TechInfoView::handleEvent(TEvent &event)
+void TechInfoView3::handleEvent(TEvent &event)
 	{
 	TView::handleEvent( event );
 
 	if (event.what == evBroadcast)
-		if (event.message.command == cmNewData)
+		if (event.message.command == cmNewData1)
 			{
 			curdata = (char *)event.message.infoPtr;
 			drawView();
 			}
 	}
-TechInfoList::TechInfoList(TRect& r, ushort numcols, TScrollBar *sb) :
+TechInfoList3::TechInfoList3(TRect& r, ushort numcols, TScrollBar *sb) :
  TListBox ( TRect(r.a.x + 2, r.a.y + 1, r.b.x - 3, r.b.y - 2 ), numcols, sb )
 	{
-	tc = new MyTCollection ();
+	tc3 = new MyTCollection3 ();
 	for (int c = 0; c < 2; c++)
 		{
-		tc->insert( (void *)data[c] );
+		tc3->insert( (void *)data3[c] );
 		}
-	newList( tc );
+	newList( tc3 );
 	}
+     

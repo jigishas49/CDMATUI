@@ -3,6 +3,7 @@
 #include "address.h"
 #include "memory_mapping.h"
 #include <fstream>
+#include "Types.h"
 int valueToWrite = 0; 
 
   u_int64_t   ulBaseAddress2 = Base_Address;
@@ -11,7 +12,7 @@ int valueToWrite = 0;
    u_int64_t   ulSUMAddressOffset2 = 0;
  int iPageSize2 = getpagesize();
 int iFileDescriptor2 = 0;
- u_int32_t* t1;
+
   u_int32_t** t2;
   void memory_map()
   {
@@ -20,17 +21,18 @@ int iFileDescriptor2 = 0;
     }
     
   }
-  void mem_trans( int valueToWrite)
+  TransmitterStatus mem_trans( )
   {
 
-     t1 = set_registers(uczMappedArea2, ulSUMAddressOffset2,valueToWrite);
+     TransmitterStatus transmiter_status= set_registers(uczMappedArea2, ulSUMAddressOffset2);
      printf("%d",valueToWrite);
+     return transmiter_status;
     
   }
-  u_int32_t**  mem_rx()
+ReceiverStatus mem_rx()
   {
-    t2=set_registers2(uczMappedArea2, ulSUMAddressOffset2+0x20000);
-    return t2;
+    ReceiverStatus reciever_status=set_registers2(uczMappedArea2, ulSUMAddressOffset2+0x20000);
+    return reciever_status;
 
   }
   
